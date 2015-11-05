@@ -2,6 +2,8 @@ package co.a_r_i_a.aria;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
@@ -14,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -67,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private RequestQueue queue;
     private Speaker speaker;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+        }
 
         eText = (EditText) findViewById(R.id.editText);
         eText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -84,8 +92,11 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        if (savedInstanceState != null) {
+            listItems = (ArrayList<String>) savedInstanceState.getSerializable("listItems");
+        }
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItems);
-        ListView listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
         queue = Volley.newRequestQueue(this);
         checkTTS();
@@ -123,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("Volley", "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                addTextToListItems(eWho.ARIA, getString(R.string.aria_error));
             }
         }) {
             @Override
@@ -134,6 +147,11 @@ public class MainActivity extends AppCompatActivity {
                 return headers;
             }
         };
+
+        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         queue.add(jsonObjReq);
     }
@@ -161,6 +179,13 @@ public class MainActivity extends AppCompatActivity {
         Intent check = new Intent();
         check.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(check, CHECK_CODE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedState) {
+        super.onSaveInstanceState(savedState);
+
+        savedState.putSerializable("listItems", listItems);
     }
 
     @Override

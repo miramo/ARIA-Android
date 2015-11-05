@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="colorPrimary">#946cd5</color>
+    <color name="colorPrimaryDark">#8756d6</color>
     <color name="colorAccent">#ffffff</color>
     <color name="white">#ffffff</color>
     <color name="bg_gradient_start">#67c4ff</color>
