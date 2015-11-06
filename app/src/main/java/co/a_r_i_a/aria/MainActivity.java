@@ -2,21 +2,14 @@ package co.a_r_i_a.aria;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -24,15 +17,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
+import com.android.volley.*;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.mikepenz.google_material_typeface_library.*;
+import com.mikepenz.materialdrawer.*;
+import com.mikepenz.materialdrawer.model.*;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,11 +51,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private final int CHECK_CODE = 0x1;
-    private final int LONG_DURATION = 5000;
-    private final int SHORT_DURATION = 1200;
-    private final int REQ_CODE_SPEECH_INPUT = 100;
-
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
     private EditText eText;
     private ArrayList<String> listItems = new ArrayList<>();
@@ -72,15 +58,15 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue queue;
     private Speaker speaker;
     private ListView listView;
+    private Drawer drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         }
 
         eText = (EditText) findViewById(R.id.editText);
@@ -98,8 +84,34 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItems);
         listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.bg_gradient)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("John Doe").withEmail("john.doe@gmail.com").withIcon(getResources().getDrawable(R.drawable.johndoe))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+        drawer = new DrawerBuilder()
+                .withActivity(this)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("Home").withIcon(GoogleMaterial.Icon.gmd_home),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName("Settings").withIcon(GoogleMaterial.Icon.gmd_settings)
+                )
+                .build();
         queue = Volley.newRequestQueue(this);
         checkTTS();
+    }
+
+    public void openDrawer(View view) {
+        drawer.openDrawer();
     }
 
     private Boolean sendText() {
@@ -116,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sendTextPostRequest(String query) {
-        Map<String, String> postParam= new HashMap<String, String>();
+        Map<String, String> postParam= new HashMap<>();
         postParam.put("query", query);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, SharedProperty.API_URL, new JSONObject(postParam),
@@ -140,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
+                HashMap<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
                 headers.put( "charset", "utf-8");
                 headers.put( "X-Api-Key", SharedProperty.API_KEY);
@@ -149,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
+                SharedProperty.VOLLEY_TIMEOUT,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -162,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, SharedProperty.LANGUAGE);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_prompt));
         try {
-            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+            startActivityForResult(intent, SharedProperty.REQ_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException a) {
             Toast.makeText(getApplicationContext(), getString(R.string.speech_not_supported), Toast.LENGTH_SHORT).show();
         }
@@ -178,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkTTS(){
         Intent check = new Intent();
         check.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(check, CHECK_CODE);
+        startActivityForResult(check, SharedProperty.CHECK_CODE);
     }
 
     @Override
@@ -193,14 +205,14 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case REQ_CODE_SPEECH_INPUT: {
+            case SharedProperty.REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     sendText(result.get(0));
                 }
                 break;
             }
-            case CHECK_CODE: {
+            case SharedProperty.CHECK_CODE: {
                 if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS){
                     speaker = new Speaker(this);
                     speaker.allow(true);
@@ -212,28 +224,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     protected void onDestroy() {

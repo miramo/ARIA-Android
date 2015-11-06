@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="transparent">@android:color/transparent</color>
+    <color name="white">#FFF</color>
     <color name="colorPrimary">#946cd5</color>
-    <color name="colorPrimaryDark">#8756d6</color>
-    <color name="colorAccent">#ffffff</color>
-    <color name="white">#ffffff</color>
-    <color name="bg_gradient_start">#67c4ff</color>
-    <color name="bg_gradient_end">#946cd5</color>
+    <color name="colorPrimaryDark">#67c4ff</color>
+    <color name="colorAccent">@color/white</color>
+    <color name="bg_gradient_start">@color/colorPrimaryDark</color>
+    <color name="bg_gradient_end">@color/colorPrimary</color>
+
+    <color name="material_drawer_primary">@color/white</color>
+    <color name="material_drawer_accent">@color/white</color>
+    <color name="material_drawer_background">@color/colorPrimaryDark</color>
+    <color name="material_drawer_primary_text">@color/white</color>
+    <color name="material_drawer_primary_icon">@color/white</color>
+    <color name="material_drawer_secondary_text">@color/white</color>
+    <color name="material_drawer_hint_text">@color/white</color>
+    <color name="material_drawer_divider">@color/white</color>
+    <color name="material_drawer_selected">#90d4ff</color>
+    <color name="material_drawer_selected_text">@color/colorPrimary</color>
+    <color name="material_drawer_header_selection_text">@color/white</color>
 </resources>
