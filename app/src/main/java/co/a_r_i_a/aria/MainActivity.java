@@ -1,6 +1,7 @@
 package co.a_r_i_a.aria;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -118,6 +120,13 @@ public class MainActivity extends AppCompatActivity {
         addTextToListItems(eWho.YOU, eText.getText().toString());
         sendTextPostRequest(eText.getText().toString());
         eText.setText("");
+        eText.clearFocus();
+        //hide keyboard
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+        }
         return true;
     }
 
@@ -181,7 +190,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addTextToListItems(eWho who, String text) {
-        listItems.add("[" + sdf.format(new Date()) + "] " + who.toString() + ": " + text);
+//        listItems.add("[" + sdf.format(new Date()) + "] " + who.toString() + ": " + text);
+        listItems.add(who.toString() + ": " + text);
         adapter.notifyDataSetChanged();
         if (who == eWho.ARIA)
             speaker.speak(text);
