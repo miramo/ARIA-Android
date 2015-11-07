@@ -1,4 +1,4 @@
-package co.a_r_i_a.aria;
+package co.a_r_i_a.aria.other;
 
 import android.content.Context;
 import android.media.AudioManager;

@@ -52,6 +52,7 @@
         android:textColor="@color/white"
         android:divider="@color/white"
         android:dividerHeight="2px"
+        android:background="@null"
         android:id="@+id/listView"
         android:layout_below="@+id/editText"
         android:layout_alignParentLeft="true"
@@ -61,6 +62,8 @@
         android:focusableInTouchMode="true"
         android:transcriptMode="alwaysScroll"
         android:stackFromBottom="false"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="48sp"
         android:clickable="true" />
 
     <ImageView

@@ -1,5 +1,8 @@
 package co.a_r_i_a.aria;
 
+import co.a_r_i_a.aria.other.SharedProperty;
+import co.a_r_i_a.aria.other.Speaker;
+
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
