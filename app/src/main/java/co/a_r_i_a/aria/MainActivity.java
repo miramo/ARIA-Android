@@ -1,5 +1,6 @@
 package co.a_r_i_a.aria;
 
+import co.a_r_i_a.aria.other.Message;
 import co.a_r_i_a.aria.other.SharedProperty;
 import co.a_r_i_a.aria.other.Speaker;
 
@@ -37,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
 
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
     private EditText eText;
-    private ArrayList<String> listItems = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
+    private MessagesListAdapter adapter;
+    private List<Message> listMessages;
+    private ListView listViewMessages;
     private RequestQueue queue;
     private Speaker speaker;
-    private ListView listView;
     private Drawer drawer;
 
     @Override
@@ -83,12 +85,10 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        if (savedInstanceState != null) {
-            listItems = (ArrayList<String>) savedInstanceState.getSerializable("listItems");
-        }
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItems);
-        listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(adapter);
+        listViewMessages = (ListView) findViewById(R.id.listViewMessages);
+        listMessages = new ArrayList<Message>();
+        adapter = new MessagesListAdapter(this, listMessages);
+        listViewMessages.setAdapter(adapter);
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.bg_gradient)
@@ -194,10 +194,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void addTextToListItems(eWho who, String text) {
 //        listItems.add("[" + sdf.format(new Date()) + "] " + who.toString() + ": " + text);
-        listItems.add(who.toString() + ": " + text);
-        adapter.notifyDataSetChanged();
+//        listItems.add(who.toString() + ": " + text);
+//        adapter.notifyDataSetChanged();
+        Message m = new Message(who.toString(), text, who == eWho.YOU ? true : false);
+        appendMessage(m);
         if (who == eWho.ARIA)
             speaker.speak(text);
+    }
+
+    private void appendMessage(final Message m) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                listMessages.add(m);
+
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void checkTTS(){
@@ -210,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle savedState) {
         super.onSaveInstanceState(savedState);
 
-        savedState.putSerializable("listItems", listItems);
+//        savedState.putSerializable("listItems", listItems);
     }
 
     @Override

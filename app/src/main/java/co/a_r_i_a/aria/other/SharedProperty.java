@@ -15,6 +15,6 @@ public class SharedProperty {
     public static final int SHORT_DURATION = 1200;
     public static final int REQ_CODE_SPEECH_INPUT = 100;
     public static String API_KEY = "6ECr8ayk6Vt8Ex0uZEToSQtt";
-    public static Locale LANGUAGE = Locale.UK;
+    public static Locale LANGUAGE = Locale.FRANCE;
 
 }

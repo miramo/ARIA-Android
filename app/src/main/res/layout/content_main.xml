@@ -43,17 +43,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="25dp"
-        android:layout_alignRight="@+id/listView"
-        android:layout_alignEnd="@+id/listView" />
+        android:layout_alignRight="@+id/listViewMessages"
+        android:layout_alignEnd="@+id/listViewMessages" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:divider="@color/white"
-        android:dividerHeight="2px"
+        android:divider="@null"
         android:background="@null"
-        android:id="@+id/listView"
+        android:id="@+id/listViewMessages"
         android:layout_below="@+id/editText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -61,9 +60,9 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:transcriptMode="alwaysScroll"
-        android:stackFromBottom="false"
+        android:stackFromBottom="true"
         android:requiresFadingEdge="vertical"
-        android:fadingEdgeLength="48sp"
+        android:fadingEdgeLength="30sp"
         android:clickable="true" />
 
     <ImageView
