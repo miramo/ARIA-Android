@@ -19,6 +19,8 @@ android {
     }
 }
 
+repositories { mavenCentral() }
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -29,6 +31,8 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.+'
     compile 'com.mikepenz:google-material-typeface:+@aar'
     compile 'com.mikepenz:fontawesome-typeface:+@aar'
+    compile 'de.hdodenhof:circleimageview:+@aar'
+    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
     compile('com.mikepenz:materialdrawer:4.4.+@aar') {
         transitive = true
     }

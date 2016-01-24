@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.android.volley.*;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.mikepenz.google_material_typeface_library.*;
 import com.mikepenz.materialdrawer.*;
 import com.mikepenz.materialdrawer.model.*;
@@ -159,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("Volley", "Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_SHORT).show();
-                addTextToListItems(eWho.ARIA, getString(R.string.aria_error));
+                addTextToListItems(eWho.ARIA, getString(R.string.aria_error_fr));
             }
         }) {
             @Override
@@ -257,4 +259,20 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         speaker.destroy();
     }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        // Logs 'install' and 'app activate' App Events.
+//        AppEventsLogger.activateApp(this);
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//
+//        // Logs 'app deactivate' App Event.
+//        AppEventsLogger.deactivateApp(this);
+//    }
 }
