@@ -13,8 +13,8 @@
     android:focusable="true"
     android:clickable="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_main"
-    tools:context=".MainActivity" >
+    tools:showIn="@layout/aria_activity"
+    tools:context=".AriaActivity" >
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editText"
-        android:hint="@string/aria_hint"
+        android:fontFamily="sans-serif-thin"
         android:imeOptions="actionDone"
         android:singleLine="true"
         android:lines="1"

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/bg_gradient"
+    tools:context=".AriaActivity">
+
+
+    <include layout="@layout/content_aria" />
+
+    <com.mikepenz.iconics.view.IconicsImageView
+        app:iiv_color="@color/white"
+        app:iiv_icon="gmd-menu"
+        android:id="@+id/imageViewMenu"
+        android:clickable="true"
+        android:onClick="openDrawer"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        android:layout_margin="10dp" />
+
+</android.support.design.widget.CoordinatorLayout>

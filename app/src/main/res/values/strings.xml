@@ -2,10 +2,13 @@
     <string name="app_name">ARIA</string>
     <string name="app_title">A.R.I.A.</string>
     <string name="action_settings">Settings</string>
-    <string name="speech_prompt">Say something&#8230;</string>
+    <string name="speech_prompt_en">Say something&#8230;</string>
+    <string name="speech_prompt_fr">Dites quelque chose&#8230;</string>
     <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
     <string name="tap_on_mic">Tap on mic to speak</string>
-    <string name="aria_hint">Ask me anything&#8230;</string>
+    <string name="aria_hint_en">Ask me anything&#8230;</string>
+    <string name="aria_hint_fr">Demande-moi n\'importe quoi&#8230;</string>
     <string name="aria_error_en">I don\'t know what you are looking for.</string>
     <string name="aria_error_fr">Je ne sais pas ce que vous cherchez.</string>
+    <string name="facebook_app_id">1431546863767388</string>
 </resources>
